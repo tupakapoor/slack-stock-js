@@ -1,9 +1,5 @@
-var serverOptions = ('0.0.0.0', parseInt(process.env.PORT) || 3000);
-var server = require('./lib/server')(serverOptions);
-var bots = require('./bots');
+var server = require('./lib/server');
 
-server.route(bots);
-
-server.start(function() {
-  console.log('jbots started at: ' + server.info.uri);
+server.start(function serverStarted() {
+  console.log('Server started running at: ', server.info.uri);
 });

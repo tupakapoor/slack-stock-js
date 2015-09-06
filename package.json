@@ -2,19 +2,26 @@
   "name": "slack-stock-js",
   "version": "0.0.1",
   "description": "Stock quotes in Slack",
+  "repository": "http://github.com/project-badass/slack-stock-js",
   "main": "index.js",
   "scripts": {
     "start": "node index",
     "test": "NODE_ENV=test node ./test"
   },
   "engines": {
-    "node": "0.10.x"
+    "node": "0.12.x"
   },
   "author": "Ameesh Kapoor",
   "license": "MIT",
   "dependencies": {
-    "hapi": "^2.6.0",
-    "wreck": "^5.6.0"
+    "hapi": "^8.8.0",
+    "joi": "^6.6.1",
+    "osmosis": "^0.0.8",
+    "slack-api": "^0.1.11",
+    "confidence": "^1.2.0",
+    "knex": "^0.8.6",
+    "bookshelf": "^0.8.2",
+    "lodash": "^3.10.0"
   },
   "devDependencies": {
     "tape": "~2.4.0"
