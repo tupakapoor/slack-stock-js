@@ -1,3 +1,5 @@
+var osmosis = require('osmosis');
+
 module.exports = {
   path:    '/stock',
   handler: function(request, reply) {
@@ -15,23 +17,33 @@ module.exports = {
     //    text=googlebot: What is the air-speed velocity of an unladen swallow?
     //    trigger_word=googlebot:
     // }
-    var Wreck = require('wreck');
     var msg = request.payload;
 
     // Suppose you only want to respond to messages that match a certain criteria
-    var matches = msg.text.match(/\$[A-Za-z.]+/g);
+    var matches = msg.text.match(/\$[A-Za-z.^]+/g);
     if (matches) {
-      body = '';
-      url = 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(';
+      // url = 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20(';
       for (var i = 0; i < matches.length; i++) {
-        if (i > 0) {
-          url += ',';
-        }
         match = matches[i].replace('$', '');
-        url += '%22' + match + '%22';
+        osmosis
+          .get('https://www.google.com/finance?q=' + match)
+          .set({
+            'price': '#market-data-div > #price-panel > div > span.pr > span',
+            'amtChange': '#market-data-div > #price-panel > div > div.id-price-change > span > span[0]',
+            'pctChange': '#market-data-div > #price-panel > div > div.id-price-change > span > span[1]'
+          })
+          .data(function (listing) {
+            console.dir(listing);
+          });
+
+        // if (i > 0) {
+          // url += ',';
+        // }
+        
+        // url += '%22' + match + '%22';
       }
 
-      url += ')%0A%09%09&format=json&diagnostics=false&env=http%3A%2F%2Fdatatables.org%2Falltables.env&callback=';
+      // url += ')%0A%09%09&format=json&diagnostics=false&env=http%3A%2F%2Fdatatables.org%2Falltables.env&callback=';
       console.log('fetch: ' + url);
       Wreck.get(url, function (err, res, payload) {
         if (!err) {
